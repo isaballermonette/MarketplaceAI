@@ -1,0 +1,25 @@
+workflows:
+  marketplace-ai-android:
+    name: Marketplace AI Android
+    instance_type: linux_x2
+    max_build_duration: 30
+    environment:
+      java: 17
+    scripts:
+      - name: Unpack Android project
+        script: |
+          rm -rf project
+          mkdir project
+          unzip -q MarketplaceAI_Android_MVP.zip -d project
+          echo "Project unpacked:"
+          find project -maxdepth 2 -type f | head -30
+      - name: Set Android SDK location
+        script: |
+          cd project
+          echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
+      - name: Build APK
+        script: |
+          cd project
+          /home/builder/programs/gradle-8.11.1/bin/gradle assembleDebug --no-daemon
+    artifacts:
+      - project/app/build/outputs/apk/debug/app-debug.apk
