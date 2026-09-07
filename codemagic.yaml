@@ -16,6 +16,8 @@ workflows:
       - name: Set Android SDK location
         script: |
           cd project
+          echo "android.useAndroidX=true" >> gradle.properties
+          echo "android.enableJetifier=true" >> gradle.properties
           echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
       - name: Build APK
         script: |
